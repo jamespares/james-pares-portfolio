@@ -1,12 +1,21 @@
 FROM nginx:alpine
 
-# Copy static files
-COPY index.html /usr/share/nginx/html/
-COPY public/headshot.jpeg /usr/share/nginx/html/
-COPY styles.css /usr/share/nginx/html/
-COPY script.js /usr/share/nginx/html/
-COPY "James Pares CV.pdf" /usr/share/nginx/html/
-COPY public/intro-video.MP4 /usr/share/nginx/html/intro-video.mp4
+# Copy static files to /public
+COPY index.html /public/
+COPY public/headshot.jpeg /public/
+COPY styles.css /public/
+COPY script.js /public/
+COPY "James Pares CV.pdf" /public/
+
+# Create nginx config to serve from /public
+RUN echo 'server { \
+    listen 80; \
+    root /public; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
