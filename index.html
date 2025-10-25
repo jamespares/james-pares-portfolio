@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Pares - CV</title>
+    <style>
+        /* CSS variables for theme colors and language display */
+        :root {
+            --parchment-bg: #f4f1ea; /* Off-white parchment color */
+            --text-color: #3a3a3a;
+            --accent-color: #6b5b47; /* Warm brown for accents */
+            --soft-navy: #2c3e50; /* Darker navy blue for buttons */
+            --soft-navy-hover: #1a2530; /* Even darker navy for hover */
+            --modal-bg: rgba(0, 0, 0, 0.8);
+            --border-color: #d4c8b0;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif; /* More professional serif font */
+            background-color: var(--parchment-bg);
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+            line-height: 1.6;
+            font-size: 16px;
+            /* Note: CSS transition doesn't work with zoom property, so removing for now */
+        }
+
+        /* Header with language toggle and video link */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background-color: white;
+            border: 1px solid var(--soft-navy);
+            color: var(--soft-navy);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background-color: var(--soft-navy);
+            color: white;
+        }
+
+        .video-trigger {
+            background-color: var(--soft-navy);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        h1 {
+            text-align: center;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent-color);
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+
+        .headshot {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: 42% 15%;
+            border: 3px solid var(--accent-color);
+            box-shadow: var(--shadow);
+            margin-bottom: 0;
+        }
+
+        .date {
+            font-style: italic;
+            color: #6b5b47;
+            font-size: 13px;
+            text-align: right;
+            margin-left: auto;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        h3 {
+            margin: 10px 0 5px 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #5a5047;
+        }
+
+        .location {
+            font-weight: normal;
+            color: #6b5b47;
+            font-style: italic;
+        }
+        
+        .course-title {
+            font-weight: bold;
+            color: #5a5047;
+        }
+
+        .experience-item h3 a, .education-item h3 a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .experience-item h3 a:hover, .education-item h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .job-title {
+            font-weight: bold;
+            color: #6b5b47;
+            font-style: italic;
+            margin: 5px 0;
+        }
+
+        ul {
+            padding-left: 15px;
+            margin: 5px 0;
+        }
+
+        li {
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-bg);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* Zoom controls */
+        .zoom-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+            z-index: 999;
+        }
+
+        .zoom-btn {
+            background-color: var(--soft-navy);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .zoom-btn:hover {
+            background-color: var(--soft-navy-hover);
+        }
+
+        /* Language-specific styles (initially hidden) */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* Minimalist design elements */
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="zh">中文</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+        <button class="video-trigger" id="videoTrigger">Watch Intro Video</button>
+    </div>
+
+    <div class="profile-section">
+        <img src="headshot.jpeg" alt="James Pares Professional Headshot" class="headshot">
+    </div>
+    
+    <h1>James Pares</h1>
+    
+    <div class="contact-info">
+        <p>Email: jamesedpares@gmail.com | WeChat: jamesedwardpares</p>
+        <p><a href="https://www.linkedin.com/in/james-p-ba7653207/" target="_blank">LinkedIn Profile</a></p>
+    </div>
+
+    <!-- English Content -->
+    <div id="lang-en" class="lang-content active">
+        <h2>Education</h2>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Postgraduate Certificate in Education with iQTS</span>, <span class="location">University of Warwick</span></h3>
+                <p class="date">Sept. 2026 -</p>
+            </div>
+            <p class="job-title">Grade: TBC</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">PGDip Leadership and Management</span>, <span class="location">Institute of Leadership (ILM)</span></h3>
+                <p class="date">Oct. 2021 - Oct. 2023</p>
+            </div>
+            <p class="job-title">Grade: Good Pass</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">MA Politics and Contemporary History</span>, <span class="location">University of Nottingham</span></h3>
+                <p class="date">Sept. 2020 - Sept. 2021</p>
+            </div>
+            <p class="job-title">Grade: Merit</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">BA English Language and Literature</span>, <span class="location">University of Nottingham</span></h3>
+                <p class="date">Sept. 2017 - Sept. 2020</p>
+            </div>
+            <p class="job-title">Grade: First Class</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">IB Diploma Programme</span>, <span class="location">Bridgwater College</span></h3>
+                <p class="date">Sept. 2013 - Sept. 2015</p>
+            </div>
+            <p class="job-title">Grade: 33/45</p>
+        </div>
+
+        <h2>Teaching Experience</h2>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">IB PYP English Teacher</span>, <span class="location">Shanghai World Foreign Language School, Shanghai</span></h3>
+                <p class="date">Feb. 2025 - Present</p>
+            </div>
+            <ul>
+                <li>Taught English Literature, Language and Grammar to Year 4 students.</li>
+                <li>Achieved highest ever score recorded in the ISA English exam.</li>
+                <li>Built a digital tool to track students' grammar errors and target additional homework on students' weak spots.</li>
+                <li>Teaching after-school French to a class of mixed-age students.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">English Teacher</span>, <span class="location">University of Nottingham, Nottingham</span></h3>
+                <p class="date">Sept. 2018 - Sept. 2020</p>
+            </div>
+            <ul>
+                <li>Led weekly two-hour English language lessons for adult learners.</li>
+                <li>Used TEFL curriculum to plan structured learning plans covering A1-A2 grammar and vocabulary.</li>
+                <li>Managed two Chinese teaching assistants to ensure students learning outcomes were maximised.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">English Teacher</span>, <span class="location">International Volunteer HQ, Morocco</span></h3>
+                <p class="date">June 2018 - July 2018</p>
+            </div>
+            <ul>
+                <li>Taught English to children aged 5-13 in a rural village of Morocco during a volunteering trip.</li>
+            </ul>
+        </div>
+
+        <h2>Non-Teaching Work Experience</h2>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Technical Project Manager</span>, <span class="location">Roam, Remote</span></h3>
+                <p class="date">Oct. 2024 - Feb. 2025</p>
+            </div>
+            <ul>
+                <li>Led a team of three at an early stage technology company focused on visa application automation.</li>
+                <li>Coordinated work for software developers working on web development, database operations and APIs.</li>
+                <li>Successfully launched the <a href="https://roamfreely.io" target="_blank">roamfreely.io</a> website.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Graduate Project Manager (2 year rotational graduate scheme with formal project management training)</span>, <span class="location">London Borough of Islington, London</span></h3>
+                <p class="date">Oct. 2021 - Oct. 2024</p>
+            </div>
+            <ul>
+                <li>Managed projects across policy, performance, compliance and procurement teams, demonstrating adaptability.</li>
+                <li>Led a large-scale research initiative, <a href="https://www.islington.gov.uk/about-the-council/vision-and-priorities/lets-talk" target="_blank">Let's Talk Islington</a>, engaging with 6,000+ individuals—including local school principals—to gather insights on improving educational standards and reducing inequality across the borough.</li>
+                <li>Worked with the corporate performance manager to build a cross-council performance dashboard tracking strategic KPIs.</li>
+                <li>Secured and managed a £300,000 grant from the Ministry of Justice, showcasing resourcefulness and persuasive communication skills.</li>
+                <li>Delivered compliance projects that achieved 'Outstanding' ratings, demonstrating attention to detail and a commitment to excellence.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Legal Internship Programme</span>, <span class="location">CMS UK, London</span></h3>
+                <p class="date">April - May 2024</p>
+            </div>
+            <ul>
+                <li>Sat in the corporate transactions and M&A for Energy and Infrastructure team.</li>
+                <li>Supported three live deals worth £100M+ involving international energy corporations and private equity firms.</li>
+                <li>Completed tasks related to due diligence and the agreement of terms for Share Purchase Agreements.</li>
+                <li>Demonstrated excellent attention to detail and a clear understanding of commercial law and complex legal frameworks.</li>
+            </ul>
+        </div>
+
+        <h2>Skills & Certifications</h2>
+        <ul class="skills">
+            <li>Data Analysis (6 month bootcamp), Imperial College London: Grade 98%</li>
+            <li>Languages: French (Fluent - C1), Mandarin (Basic - HSK3)</li>
+            <li>Project Management: PRINCE2, Agile Project Management, Google Project Management Certification</li>
+            <li>Teaching: TEFL 120 hour certification (May 2023)</li>
+        </ul>
+    </div>
+
+    <!-- Chinese Content -->
+    <div id="lang-zh" class="lang-content">
+        <h2>教育</h2>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">教育研究生证书 (iQTS)</span>, <span class="location">华威大学</span></h3>
+                <p class="date">2026年9月-</p>
+            </div>
+            <p class="job-title">成绩: 待定</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">领导力与管理研究生文凭</span>, <span class="location">英国领导力学院 (ILM)</span></h3>
+                <p class="date">2021年10月 - 2023年10月</p>
+            </div>
+            <p class="job-title">成绩: 良好通过</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">政治与当代史硕士</span>, <span class="location">诺丁汉大学</span></h3>
+                <p class="date">2020年9月 - 2021年9月</p>
+            </div>
+            <p class="job-title">成绩: 优异</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">英语语言与文学学士</span>, <span class="location">诺丁汉大学</span></h3>
+                <p class="date">2017年9月 - 2020年9月</p>
+            </div>
+            <p class="job-title">成绩: 一等荣誉学位</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">国际文凭大学预科课程</span>, <span class="location">布里奇沃特学院</span></h3>
+                <p class="date">2013年9月 - 2015年9月</p>
+            </div>
+            <p class="job-title">成绩: 33/45</p>
+        </div>
+
+        <h2>教学经验</h2>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">IB PYP英语教师</span>, <span class="location">上海世界外国语学校，上海</span></h3>
+                <p class="date">2025年2月 - 至今</p>
+            </div>
+            <ul>
+                <li>教授4年级学生的英语文学、语言和语法。</li>
+                <li>在ISA英语考试中取得了有史以来的最高分。</li>
+                <li>建立了一个数字工具来追踪学生的语法错误，并针对学生的薄弱环节布置额外的家庭作业。</li>
+                <li>教授课后法语给不同年龄的学生班级。</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">英语教师</span>, <span class="location">诺丁汉大学，诺丁汉</span></h3>
+                <p class="date">2018年9月 - 2020年9月</p>
+            </div>
+            <ul>
+                <li>每周为成人学习者提供两小时的英语课程。</li>
+                <li>使用TEFL课程计划有结构的学习计划，涵盖A1-A2语法和词汇。</li>
+                <li>管理两名中国助教，确保学生的学业成果最大化。</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">英语教师</span>, <span class="location">国际志愿者总部，摩洛哥</span></h3>
+                <p class="date">2018年6月 - 2018年7月</p>
+            </div>
+            <ul>
+                <li>在摩洛哥一个农村村庄的志愿活动中，教授5-13岁儿童英语。</li>
+            </ul>
+        </div>
+
+        <h2>非教学工作经验</h2>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">技术项目经理</span>, <span class="location">Roam，远程</span></h3>
+                <p class="date">2024年10月 - 2025年2月</p>
+            </div>
+            <ul>
+                <li>在一家专注于签证申请自动化的早期技术公司领导三人团队。</li>
+                <li>协调软件开发人员在Web开发、数据库操作和API方面的工作。</li>
+                <li>成功推出了roamfreely.io网站。</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">毕业生项目经理（为期两年的轮岗毕业生计划，包含正式的项目管理培训）</span>, <span class="location">伦敦伊斯灵顿区议会，伦敦</span></h3>
+                <p class="date">2021年10月 - 2024年10月</p>
+            </div>
+            <ul>
+                <li>在政策、绩效、合规和采购团队中管理项目，展现适应能力。</li>
+                <li>领导一项大规模研究倡议，<a href="https://www.islington.gov.uk/about-the-council/vision-and-priorities/lets-talk" target="_blank">让我们谈谈伊斯灵顿</a>，与6000多人互动——包括当地校长——以收集改善该区教育标准和减少不平等的见解。</li>
+                <li>与企业绩效经理合作，建立跨理事会绩效仪表板，追踪战略KPI。</li>
+                <li>从司法部获得并管理30万英镑的拨款，展现了足智多谋和有说服力的沟通技巧。</li>
+                <li>交付了获得"优秀"评级的合规项目，展现了对细节的关注和对卓越的承诺。</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">法律实习计划</span>, <span class="location">CMS UK，伦敦</span></h3>
+                <p class="date">2024年4月 - 2024年5月</p>
+            </div>
+            <ul>
+                <li>参与企业交易和能源基础设施并购团队。</li>
+                <li>支持三个价值超过1亿英镑的实时交易，涉及国际能源公司和私募股权公司。</li>
+                <li>完成了与尽职调查和股份购买协议条款约定相关的任务。</li>
+                <li>展现了对细节的出色关注和对商业法和复杂法律框架的清晰理解。</li>
+            </ul>
+        </div>
+
+        <h2>技能与认证</h2>
+        <ul class="skills">
+            <li>数据分析 (6个月训练营), 帝国理工学院: 成绩98%</li>
+            <li>语言: 法语 (流利 - C1), 普通话 (基础 - HSK3)</li>
+            <li>项目管理: PRINCE2, 敏捷项目管理, Google项目管理认证</li>
+            <li>教学: TEFL 120小时证书 (2023年5月)</li>
+        </ul>
+    </div>
+
+    <!-- French Content -->
+    <div id="lang-fr" class="lang-content">
+        <h2>Formation</h2>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Certificat d'enseignement postuniversitaire avec iQTS</span>, <span class="location">Université de Warwick</span></h3>
+                <p class="date">Sept. 2026 -</p>
+            </div>
+            <p class="job-title">Note: à déterminer</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Diplôme de 2e cycle en Leadership et Management</span>, <span class="location">Institut du Leadership (ILM)</span></h3>
+                <p class="date">Oct. 2021 - Oct. 2023</p>
+            </div>
+            <p class="job-title">Note: Good Pass</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Master en Politique et Histoire Contemporaine</span>, <span class="location">Université de Nottingham</span></h3>
+                <p class="date">Sept. 2020 - Sept. 2021</p>
+            </div>
+            <p class="job-title">Note: Merit</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Licence en Langue et Littérature Anglaises</span>, <span class="location">Université de Nottingham</span></h3>
+                <p class="date">Sept. 2017 - Sept. 2020</p>
+            </div>
+            <p class="job-title">Note: First Class</p>
+        </div>
+        <div class="education-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Programme du Baccalauréat International</span>, <span class="location">Bridgwater College</span></h3>
+                <p class="date">Sept. 2013 - Sept. 2015</p>
+            </div>
+            <p class="job-title">Note: 33/45</p>
+        </div>
+
+        <h2>Expérience pédagogique</h2>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Professeur d'anglais IB PYP</span>, <span class="location">Shanghai World Foreign Language School, Shanghai</span></h3>
+                <p class="date">Fév. 2025 - Présent</p>
+            </div>
+            <ul>
+                <li>Enseignement de la littérature, de la langue et de la grammaire anglaises aux élèves de CE2.</li>
+                <li>Obtention du score le plus élevé jamais enregistré à l'examen ISA d'anglais.</li>
+                <li>Création d'un outil numérique pour suivre les erreurs grammaticales des élèves et cibler les devoirs supplémentaires sur leurs points faibles.</li>
+                <li>Enseignement du français hors-série à une classe d'élèves d'âges mélangés.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Professeur d'anglais</span>, <span class="location">Université de Nottingham, Nottingham</span></h3>
+                <p class="date">Sept. 2018 - Sept. 2020</p>
+            </div>
+            <ul>
+                <li>Encadrement de leçons hebdomadaires d'anglais de deux heures pour les apprenants adultes.</li>
+                <li>Utilisation du programme TEFL pour planifier des plans d'apprentissage structurés couvrant la grammaire et le vocabulaire A1-A2.</li>
+                <li>Gestion de deux assistantes pédagogiques chinoises pour maximiser les résultats d'apprentissage des élèves.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Professeur d'anglais</span>, <span class="location">International Volunteer HQ, Maroc</span></h3>
+                <p class="date">Juin 2018 - Juil. 2018</p>
+            </div>
+            <ul>
+                <li>Enseignement de l'anglais à des enfants âgés de 5 à 13 ans dans un village rural du Maroc pendant un voyage de bénévolat.</li>
+            </ul>
+        </div>
+
+        <h2>Expérience professionnelle non pédagogique</h2>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Chef de projet technique</span>, <span class="location">Roam, à distance</span></h3>
+                <p class="date">Oct. 2024 - Fév. 2025</p>
+            </div>
+            <ul>
+                <li>Direction d'une équipe de trois personnes dans une entreprise technologique en phase initiale axée sur l'automatisation des demandes de visa.</li>
+                <li>Coordination du travail des développeurs logiciels travaillant sur le développement Web, les opérations de base de données et les API.</li>
+                <li>Lancement réussi du site Web roamfreely.io.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Chef de projet diplômé (programme de rotation diplômé de 2 ans avec formation formelle à la gestion de projets)</span>, <span class="location">Conseil de Londres Islington, Londres</span></h3>
+                <p class="date">Oct. 2021 - Oct. 2024</p>
+            </div>
+            <ul>
+                <li>Gestion de projets à travers les équipes de politique, de performance, de conformité et d'approvisionnement, démontrant de l'adaptabilité.</li>
+                <li>Responsable d'une initiative de recherche à grande échelle, <a href="https://www.islington.gov.uk/about-the-council/vision-and-priorities/lets-talk" target="_blank">Let's Talk Islington</a>, en interaction avec plus de 6 000 personnes — notamment des chefs d'établissement locaux — pour recueillir des idées sur l'amélioration des normes éducatives et la réduction des inégalités dans tout le borough.</li>
+                <li>Collaboration avec le responsable de la performance corporative pour créer un tableau de bord inter-conseil suivant les KPI stratégiques.</li>
+                <li>Obtention et gestion d'une subvention de 300 000 £ du ministère de la Justice, démontrant de la débrouillardise et des compétences de communication persuasives.</li>
+                <li>Réalisation de projets de conformité qui ont obtenu des évaluations "Excellent", démontrant une attention portée aux détails et un engagement envers l'excellence.</li>
+            </ul>
+        </div>
+        <div class="experience-item">
+            <div style="display: flex; justify-content: space-between;">
+                <h3><span class="course-title">Programme de stage en droit</span>, <span class="location">CMS UK, Londres</span></h3>
+                <p class="date">Avril - Mai 2024</p>
+            </div>
+            <ul>
+                <li>Travail dans l'équipe des transactions d'entreprise et des fusions-acquisitions pour l'énergie et les infrastructures.</li>
+                <li>Appui à trois transactions en cours d'une valeur de plus de 100 millions £ impliquant des sociétés énergétiques internationales et des sociétés de capital-investissement.</li>
+                <li>Exécution de tâches liées à la diligence raisonnable et à la négociation des termes des accords de vente d'actions.</li>
+                <li>Démonstration d'une excellente attention portée aux détails et d'une compréhension claire du droit commercial et des cadres juridiques complexes.</li>
+            </ul>
+        </div>
+
+        <h2>Compétences & certifications</h2>
+        <ul class="skills">
+            <li>Analyse de données (6 mois bootcamp), Imperial College London: Note 98%</li>
+            <li>Langues: Français (Courant - C1), Mandarin (Basique - HSK3)</li>
+            <li>Gestion de projet: PRINCE2, Gestion de projet Agile, Certification Google en gestion de projet</li>
+            <li>Enseignement: Certificat TEFL 120 heures (Mai 2023)</li>
+        </ul>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <button class="close">&times;</button>
+            <div class="video-container">
+                <video id="introVideo" controls poster="headshot.jpeg">
+                    <source src="intro-video.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la vidéo.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zoom Controls -->
+    <div class="zoom-controls">
+        <button class="zoom-btn" id="zoomIn">+</button>
+        <button class="zoom-btn" id="zoomOut">-</button>
+        <button class="zoom-btn" id="zoomReset">R</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language toggle functionality
+            const langBtns = document.querySelectorAll('.lang-btn');
+            
+            langBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    
+                    // Update active button
+                    langBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show active language content
+                    const allLangContents = document.querySelectorAll('.lang-content');
+                    allLangContents.forEach(content => {
+                        if(content.id === `lang-${lang}`) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            // Video modal functionality
+            const videoTrigger = document.getElementById('videoTrigger');
+            const modal = document.getElementById('videoModal');
+            const closeBtn = document.querySelector('.close');
+            const video = document.getElementById('introVideo');
+            
+            videoTrigger.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                video.pause();
+            });
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    video.pause();
+                }
+            });
+            
+            // Zoom functionality
+            const zoomInBtn = document.getElementById('zoomIn');
+            const zoomOutBtn = document.getElementById('zoomOut');
+            const zoomResetBtn = document.getElementById('zoomReset');
+
+            let currentZoom = 1;
+            const zoomStep = 0.1;
+            const maxZoom = 2;
+            const minZoom = 0.5;
+            
+            function updateZoom() {
+                document.body.style.zoom = currentZoom;
+            }
+            
+            zoomInBtn.addEventListener('click', function() {
+                if (currentZoom < maxZoom) {
+                    currentZoom += zoomStep;
+                    updateZoom();
+                }
+            });
+            
+            zoomOutBtn.addEventListener('click', function() {
+                if (currentZoom > minZoom) {
+                    currentZoom -= zoomStep;
+                    updateZoom();
+                }
+            });
+            
+            zoomResetBtn.addEventListener('click', function() {
+                currentZoom = 1;
+                updateZoom();
+            });
+            
+            // Allow zoom with Ctrl + mouse wheel
+            document.addEventListener('wheel', function(e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    if (e.deltaY < 0) {
+                        // Zoom in
+                        if (currentZoom < maxZoom) {
+                            currentZoom += zoomStep;
+                            updateZoom();
+                        }
+                    } else {
+                        // Zoom out
+                        if (currentZoom > minZoom) {
+                            currentZoom -= zoomStep;
+                            updateZoom();
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
