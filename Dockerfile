@@ -5,7 +5,6 @@ COPY index.html /public/
 COPY public/headshot.jpeg /public/
 COPY styles.css /public/
 COPY script.js /public/
-COPY "James Pares CV.pdf" /public/
 
 # Create nginx config to serve from /public
 RUN echo 'server { \
