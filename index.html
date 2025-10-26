@@ -60,17 +60,6 @@
             color: white;
         }
 
-        .video-trigger {
-            background-color: var(--soft-navy);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-        }
 
         h1 {
             text-align: center;
@@ -173,63 +162,7 @@
             font-size: 14px;
         }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--modal-bg);
-            backdrop-filter: blur(4px);
-        }
 
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 0;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-            box-shadow: var(--shadow);
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 1001;
-            background: none;
-            border: none;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-        }
-
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-        }
-
-        .video-container video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 8px 8px 0 0;
-        }
 
         /* Zoom controls */
         .zoom-controls {
@@ -284,7 +217,6 @@
             <button class="lang-btn" data-lang="zh">中文</button>
             <button class="lang-btn" data-lang="fr">FR</button>
         </div>
-        <button class="video-trigger" id="videoTrigger">Watch Intro Video</button>
     </div>
 
     <div class="profile-section">
@@ -658,18 +590,6 @@
         </ul>
     </div>
 
-    <!-- Video Modal -->
-    <div id="videoModal" class="modal">
-        <div class="modal-content">
-            <button class="close">&times;</button>
-            <div class="video-container">
-                <video id="introVideo" controls poster="headshot.jpeg">
-                    <source src="intro-video.mp4" type="video/mp4">
-                    Votre navigateur ne supporte pas la vidéo.
-                </video>
-            </div>
-        </div>
-    </div>
 
     <!-- Zoom Controls -->
     <div class="zoom-controls">
@@ -701,28 +621,6 @@
                         }
                     });
                 });
-            });
-            
-            // Video modal functionality
-            const videoTrigger = document.getElementById('videoTrigger');
-            const modal = document.getElementById('videoModal');
-            const closeBtn = document.querySelector('.close');
-            const video = document.getElementById('introVideo');
-            
-            videoTrigger.addEventListener('click', function() {
-                modal.style.display = 'block';
-            });
-            
-            closeBtn.addEventListener('click', function() {
-                modal.style.display = 'none';
-                video.pause();
-            });
-            
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                    video.pause();
-                }
             });
             
             // Zoom functionality
